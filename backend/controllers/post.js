@@ -1,4 +1,4 @@
-import postMessage from "../models/conrtroller/postMessage.js"
+import postMessage from "../models/postMessage.js"
 //import postMessage  from "../models/conrtroller/postMessage.js";
 
 export const getPost = async (req,res)=>{

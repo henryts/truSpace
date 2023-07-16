@@ -14,6 +14,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {  useNavigate } from "react-router-dom";
+import { SignupUser } from '../../api/users';
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required('First Name is required'),
@@ -23,9 +25,14 @@ const validationSchema = Yup.object({
 });
 
 function SignUp() {
-  const handleSubmit = (values) => {
+  const navigate=useNavigate()
+  const handleSubmit = async (values) => {
     console.log(values);
+    const response = await SignupUser(values);
+    if (response.success) {
+      navigate('/login');
   };
+}
 
   return (
     <ThemeProvider theme={createTheme()}>
@@ -40,6 +47,7 @@ function SignUp() {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">

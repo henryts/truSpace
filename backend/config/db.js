@@ -8,7 +8,7 @@ const CONNECTION_URL = process.env.MONGO_URI;
 
 
 const connection = mongoose
-  .connect(CONNECTION_URL, {
+  .connect('mongodb://0.0.0.0:27017/mernauth', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

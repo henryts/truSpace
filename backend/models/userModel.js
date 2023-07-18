@@ -1,12 +1,19 @@
 import mongoose from "mongoose";
 
 const userSchema=mongoose.Schema({
-    name:{
+    username:{
         type:String,
         required:true
     },
+   
     email:{
         type:String,
+        required:true,
+        unique:true,
+        trim:true
+    },
+     mobile:{
+        type:Number,
         required:true,
         unique:true,
         trim:true
@@ -15,10 +22,7 @@ const userSchema=mongoose.Schema({
         type:String,
         required:true
     },
-    mobile: {
-        type: String,
-        required: true,
-    },
+   
     status: {
         type: String,
         default: "active"

@@ -16,10 +16,11 @@
     padding: 50px;
     background-color: #FFFFFF;
     text-align: center;
+   
   }
   
   .signup-box {
-    /* Apply your signup/signin box styling here */
+   
   }
   
   /* Add responsive styles as needed */
@@ -31,6 +32,7 @@
     .left-container,
     .right-container {
       padding: 20px;
+      
     }
     .promo-image {
       margin-top: 20px;

@@ -17,6 +17,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {  useNavigate } from "react-router-dom";
 import { SignupUser } from '../../api/users';
 
+
+
 const validationSchema = Yup.object({
   firstName: Yup.string().required('First Name is required'),
   lastName: Yup.string().required('Last Name is required'),
@@ -40,10 +42,12 @@ function SignUp() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+           
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            paddingTop: -3
+          
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -106,6 +110,17 @@ function SignUp() {
                     as={TextField}
                     required
                     fullWidth
+                    id="mobile"
+                    label="Mobile Number"
+                    name="mobile"
+                    autoComplete="Mobile"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Field
+                    as={TextField}
+                    required
+                    fullWidth
                     name="password"
                     label="Password"
                     type="password"
@@ -113,19 +128,19 @@ function SignUp() {
                     autoComplete="new-password"
                   />
                 </Grid>
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                   <FormControlLabel
                     control={<Field as={Checkbox} name="subscribe" color="primary" />}
                     label="I want to receive inspiration, marketing promotions and updates via email."
                   />
-                </Grid>
+                </Grid> */}
               </Grid>
               <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                 Sign Up
               </Button>
               <Grid container justifyContent="flex-end">
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="/" variant="body2">
                     Already have an account? Sign in
                   </Link>
                 </Grid>

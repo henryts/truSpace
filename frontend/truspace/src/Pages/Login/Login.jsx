@@ -1,134 +1,111 @@
-import React from 'react';
-import loginpic from './pic5.jpg'
-import {
-  Card,
-  Input,
-  Checkbox,
-  Button,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Typography,
-  Tooltip,
-} from "@material-tailwind/react";
-function LoginPage() {
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+
+
+
+const validationSchema = Yup.object({
+  email: Yup.string().email('Invalid email address').required('Required'),
+  password: Yup.string().required('Required'),
+});
+
+const defaultTheme = createTheme();
+
+export default function LoginPage() {
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
+
   return (
-
-    <div className="flex h-screen">
-  <div className="w-1/2 bg-white-400" >
-    {/* Left container content goes here */}
-    <div className="flex justify-center items-center h-screen">
-    <Card className="w-96" >
-      <CardHeader floated={false} className="h-80">
-        <img src={loginpic} alt="profile-picture" />
-      </CardHeader>
-      <CardBody className="text-center">
-        <Typography variant="h4" color="blue-gray" className="mb-2">
-          S.Cavil 
-        </Typography>
-        <Typography color="blue" className="font-medium" textGradient>
-          Recent Login
-        </Typography>
-      </CardBody>
-      <CardFooter className="flex justify-center gap-7 pt-2">
-        <Tooltip content="Like">
-          <Typography
-            as="a"
-            href="#facebook"
-            variant="lead"
-            color="blue"
-            textGradient
-          >
-            <i className="fab fa-facebook" />
-          </Typography>
-        </Tooltip>
-        <Tooltip content="Follow">
-          <Typography
-            as="a"
-            href="#twitter"
-            variant="lead"
-            color="light-blue"
-            textGradient
-          >
-            <i className="fab fa-twitter" />
-          </Typography>
-        </Tooltip>
-        <Tooltip content="Follow">
-          <Typography
-            as="a"
-            href="#instagram"
-            variant="lead"
-            color="purple"
-            textGradient
-          >
-            <i className="fab fa-instagram" />
-          </Typography>
-        </Tooltip>
-      </CardFooter>
-    </Card>
-    </div>
-  </div>
-  <div className="w-1/2 bg-white-200">
-  <div className="flex justify-center items-center h-screen ">
-  <Card  color="transparent" shadow={false}>
-    <Typography variant="h4" color="blue-gray">
-      Sign Up
-    </Typography>
-    <Typography color="gray" className="mt-1 font-normal">
-      Enter your details to register.
-    </Typography>
-    <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
-      <div className="mb-4 flex flex-col gap-6">
-        <Input size="lg" label="Name" />
-        <Input size="lg" label="Email" />
-        <Input type="password" size="lg" label="Password" />
-      </div>
-      <Checkbox
-        label={
-          (
-            <Typography
-              variant="small"
-              color="gray"
-              className="flex items-center font-normal"
-            >
-              I agree the
-              <a
-                href="#"
-                className="font-medium transition-colors hover:text-blue-500"
-              >
-                &nbsp;Terms and Conditions
-              </a>
-            </Typography>
-          )
-        }
-        containerProps={{ className: "-ml-2.5" }}
-      />
-      <Button className="mt-6" fullWidth>
-        Register
-      </Button>
-      <Typography color="gray" className="mt-4 text-center font-normal">
-        Already have an account?{" "}
-        <a
-          href="#"
-          className="font-medium text-blue-500 transition-colors hover:text-blue-700"
+    <ThemeProvider theme={defaultTheme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
         >
-          Sign In
-        </a>
-      </Typography>
-    </form>
-  </Card>
-  </div>
-</div>
-
-
-
-
-
-
-    
-  
- </div>
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <Box component="form" onSubmit={formik.handleSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              {...formik.getFieldProps('email')}
+              error={formik.touched.email && formik.errors.email}
+              helperText={formik.touched.email && formik.errors.email}
+            />
+            <TextField
+              margin="normal"
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              {...formik.getFieldProps('password')}
+              error={formik.touched.password && formik.errors.password}
+              helperText={formik.touched.password && formik.errors.password}
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="/signup" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
 }
-
-export default LoginPage;

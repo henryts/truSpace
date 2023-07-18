@@ -1,6 +1,8 @@
 import postMessage from "../models/postMessage.js"
 import user from "../models/userModel.js";
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
 
 export  const signup = async (req, res) => {
       const { username, email,mobile, password } = req.body;
@@ -24,7 +26,7 @@ export  const signup = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         const newUser = new user({
-         username,
+          username,
           email,
           mobile,
          password:hashedPassword 
@@ -58,13 +60,13 @@ export  const signup = async (req, res) => {
             accessToken: accessToken
           });
         } else {
-          res.status(400).send({
+          res.status(200).send({
             success: false,
             message: "Invalid Password",
           });
         }
       } else {
-        res.status(400).send({
+        res.status(200).send({
           success: false,
           message: "User Not Exists!",
         });

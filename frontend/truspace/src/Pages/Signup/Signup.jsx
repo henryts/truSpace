@@ -2,6 +2,8 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { SignupUser } from '../../api/users'
+import { toast,ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import {
     Card,
     Input,
@@ -31,11 +33,12 @@ export default function Signup() {
   
     const navigate=useNavigate()
   const handleSubmit = async (values) => {
-    console.log(values);
+   // console.log(values);
     const response = await SignupUser(values);
     if (response.success) {
+      toast.success(response.message);
       navigate('/login');
-  };
+  }
 }
 
     return (

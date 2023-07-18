@@ -14,6 +14,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { LoginUser } from '../../api/users';
+import {  useNavigate } from "react-router-dom";
 
 
 
@@ -25,14 +27,23 @@ const validationSchema = Yup.object({
 const defaultTheme = createTheme();
 
 export default function LoginPage() {
+  const navigate=useNavigate();
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
     validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async(data) => {
+      const response = await LoginUser(data);
+      console.log(response);
+      if (response.success) {
+       // toast.success(response.message);
+        localStorage.setItem('token',JSON.stringify(response.accessToken));
+        localStorage.setItem('userInfo', JSON.stringify(response.userInfo));
+      //  dispatch(setCredential(response.userInfo))
+        navigate('/')
+      }
     },
   });
 

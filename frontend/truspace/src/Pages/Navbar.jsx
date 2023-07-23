@@ -83,9 +83,9 @@ const Navbar = () => {
               <LightMode sx={{ color: dark, fontSize: "25px" }} />
             )}
           </IconButton>
-          <Message sx={{ fontSize: "25px" }} />
-          <Notifications sx={{ fontSize: "25px" }} />
-          <Help sx={{ fontSize: "25px" }} />
+          <Message sx={{ fontSize: "25px", color: theme.palette.mode === "dark" ? "#fff" : undefined }} /> {/* White color in dark mode */}
+          <Notifications sx={{ fontSize: "25px", color: theme.palette.mode === "dark" ? "#fff" : undefined }} /> {/* White color in dark mode */}
+          <Help sx={{ fontSize: "25px", color: theme.palette.mode === "dark" ? "#fff" : undefined }} /> {/* White color in dark mode */}
           <FormControl variant="standard" value={fullName}>
             <Select
               value={fullName}
@@ -158,9 +158,9 @@ const Navbar = () => {
                 <LightMode sx={{ color: dark, fontSize: "25px" }} />
               )}
             </IconButton>
-            <Message sx={{ fontSize: "25px" }} />
-            <Notifications sx={{ fontSize: "25px" }} />
-            <Help sx={{ fontSize: "25px" }} />
+            <Message sx={{ fontSize: "25px", color: theme.palette.mode === "dark" ? "#fff" : undefined }} /> {/* White color in dark mode */}
+          <Notifications sx={{ fontSize: "25px", color: theme.palette.mode === "dark" ? "#fff" : undefined }} /> {/* White color in dark mode */}
+          <Help sx={{ fontSize: "25px", color: theme.palette.mode === "dark" ? "#fff" : undefined }} /> {/* White color in dark mode */}
             <FormControl variant="standard" value={fullName}>
               <Select
                 value={fullName}

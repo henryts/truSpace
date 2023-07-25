@@ -3,18 +3,18 @@ import Form from "./Form";
 
 const LoginPage = () => {
   const theme = useTheme();
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)"); 
+  
   return (
+   
     <Box>
-      <Box
+   <Box
         width="100%"
         backgroundColor={theme.palette.background.alt}
         p="1rem 6%"
         textAlign="center"
       >
-        <Typography fontWeight="bold" fontSize="32px" color="primary">
-          Sociopedia
-        </Typography>
+        
       </Box>
 
       <Box
@@ -24,12 +24,20 @@ const LoginPage = () => {
         borderRadius="1.5rem"
         backgroundColor={theme.palette.background.alt}
       >
-        <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
-          Welcome to Socipedia, the Social Media for Sociopaths!
+        <Typography fontWeight="500"
+  variant="h5"
+  sx={{
+    mb: "1.5rem",
+    color: "rgb(204, 0, 108)", // Reddish-rose color (adjust the RGB values as needed)
+    fontSize: "2.5rem", // Adjust the font size as needed
+  }}>
+          Welcome to truSpace Connect with true ones!
         </Typography>
         <Form />
       </Box>
     </Box>
+ 
+ 
   );
 };
 

@@ -16,6 +16,8 @@ import { setLogin } from "../../state/index";
 import Dropzone from "react-dropzone";
 import FlexBetween from "../../components/Home/FlexBetween";
 
+
+
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
   lastName: yup.string().required("required"),
@@ -86,10 +88,23 @@ const Form = () => {
       body: JSON.stringify(values),
     });
     const loggedIn = await loggedInResponse.json();
+    console.log("login response: ",loggedIn);
     onSubmitProps.resetForm();
-    if (loggedIn) {
+    if(loggedIn.msg=="Invalid credentials." )
+    {
+      onSubmitProps.setErrors({ email: "Invalid credentials" })
       dispatch(
         setLogin({
+          success: false,
+          user: null,
+          token: null,
+        })
+      );
+    }
+    else {
+      dispatch(
+        setLogin({
+          success: true,
           user: loggedIn.user,
           token: loggedIn.token,
         })
@@ -104,6 +119,8 @@ const Form = () => {
   };
 
   return (
+   
+      <Box width="300px" p="1rem" boxShadow="0 0 10px rgba(0, 0, 0, 0.1) " >
     <Formik
       onSubmit={handleFormSubmit}
       initialValues={isLogin ? initialValuesLogin : initialValuesRegister}
@@ -207,6 +224,7 @@ const Form = () => {
                     )}
                   </Dropzone>
                 </Box>
+     
               </>
             )}
 
@@ -231,6 +249,10 @@ const Form = () => {
               helperText={touched.password && errors.password}
               sx={{ gridColumn: "span 4" }}
             />
+             {/* Display the error message for the email field */}
+  {Boolean(touched.email) && Boolean(errors.email) && (
+    <div style={{ color: "red" }}>{errors.email}</div>
+  )}
           </Box>
 
           {/* BUTTONS */}
@@ -270,6 +292,8 @@ const Form = () => {
         </form>
       )}
     </Formik>
+    </Box>
+ 
   );
 };
 

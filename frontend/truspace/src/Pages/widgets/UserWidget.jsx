@@ -5,7 +5,7 @@ import {
     WorkOutlineOutlined,
   } from "@mui/icons-material";
   import { Box, Typography, Divider, useTheme } from "@mui/material";
- // import UserImage from "components/UserImage";
+ import UserImage from "../../components/UserImage";
   import FlexBetween from "../../components/Home/FlexBetween";
   import WidgetWrapper from "../../components/Home/WidgetWrapper";
   import { useSelector } from "react-redux";
@@ -27,13 +27,14 @@ import {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
+     
       setUser(data);
     };
   
     useEffect(() => {
       getUser();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  
+   
     if (!user) {
       return null;
     }
@@ -57,7 +58,7 @@ import {
           onClick={() => navigate(`/profile/${userId}`)}
         >
           <FlexBetween gap="1rem">
-            {/* <UserImage image={picturePath} /> */}
+            <UserImage image={picturePath} />
             <Box>
               <Typography
                 variant="h4"
@@ -120,7 +121,7 @@ import {
   
           <FlexBetween gap="1rem" mb="0.5rem">
             <FlexBetween gap="1rem">
-              <img src="../assets/twitter.png" alt="twitter" />
+              <img src="../../public/twitter.png" alt="twitter" />
               <Box>
                 <Typography color={main} fontWeight="500">
                   Twitter
@@ -133,7 +134,7 @@ import {
   
           <FlexBetween gap="1rem">
             <FlexBetween gap="1rem">
-              <img src="../assets/linkedin.png" alt="linkedin" />
+              <img src="../../public/linkedin.png" alt="linkedin" />
               <Box>
                 <Typography color={main} fontWeight="500">
                   Linkedin

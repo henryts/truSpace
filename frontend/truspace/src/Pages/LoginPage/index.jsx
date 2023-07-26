@@ -13,6 +13,7 @@ const LoginPage = () => {
           flexDirection: isNonMobileScreens ? "row" : "column",
           alignItems: "center",
           justifyContent: "center",
+          
         }}
       >
     <Box
@@ -25,6 +26,12 @@ const LoginPage = () => {
       borderRadius={theme.spacing(3)}
       boxShadow="0 2px 4px rgba(0, 0, 0, 0.2)"
       p={3}
+      sx={{
+        '@media screen and (max-width: 1000px)': {
+          display: 'none',
+        },
+      }}
+
     >
       <img
         src="./logo.jpg"

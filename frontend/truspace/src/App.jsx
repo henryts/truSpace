@@ -18,14 +18,14 @@ function App() {
     <>
       <BrowserRouter>
       <ThemeProvider theme={theme}>
-      <Routes>
+      <Routes> 
       <Route path="/" element={<LoginPage/>}/>
       <Route path="/home" element={<Home/>}/>
 
        <Route path="/Signup" element={<Signup/>}/>
        {/* <Route path="/profile/:userId" element={<Profile/>}/> */}
 
-
+    
 
       </Routes>
       </ThemeProvider>

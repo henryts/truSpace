@@ -7,7 +7,7 @@ const postSchema = mongoose.Schema(
       required: true,
     },
     firstName: {
-      type: String,
+      type: String,  //remove
       required: true,
     },
     lastName: {
@@ -16,8 +16,8 @@ const postSchema = mongoose.Schema(
     },
     location: String,
     description: String,
-    picturePath: String,
-    userPicturePath: String,
+    picturePath: String, 
+    userPicturePath: String, //remove
     likes: {
       type: Map,
       of: Boolean,

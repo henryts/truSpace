@@ -17,13 +17,14 @@ import {
     IconButton,
     useMediaQuery,
   } from "@mui/material";
-  import FlexBetween from "components/FlexBetween";
+  import FlexBetween from "../../components/Home/FlexBetween";
   import Dropzone from "react-dropzone";
-  import UserImage from "components/UserImage";
-  import WidgetWrapper from "components/WidgetWrapper";
+  import UserImage from "../../components/UserImage";
+  import WidgetWrapper from "../../components/UserImage";
   import { useState } from "react";
   import { useDispatch, useSelector } from "react-redux";
-  import { setPosts } from "state";
+  import { setPosts } from "../../state/index";
+  import { API_BaseURL } from "../../config";
   
   const MyPostWidget = ({ picturePath }) => {
     const dispatch = useDispatch();
@@ -46,12 +47,13 @@ import {
         formData.append("picturePath", image.name);
       }
   
-      const response = await fetch(`http://localhost:3001/posts`, {
+      const response = await fetch(`${API_BaseURL}/posts`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
       const posts = await response.json();
+      console.log({posts});
       dispatch(setPosts({ posts }));
       setImage(null);
       setPost("");

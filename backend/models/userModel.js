@@ -45,13 +45,27 @@ const UserSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    // location: String,
-    // occupation: String,
-    viewedProfile: Number,
-    impressions: Number,
+    mobileVerified:{
+      type:Boolean,
+      default:false
+    },
+    emailVerified:{
+      type:Boolean,
+      default:false
+    },
+   
+    viewedProfile: {
+      type:String,
+      default:0,
+     // required:false,
+      unique:false
+      
+    },
+ 
+   
   },
   { timestamps: true }
 );
 
-const User = mongoose.model("User", UserSchema);
+const User = mongoose.model("users", UserSchema);
 export default User;

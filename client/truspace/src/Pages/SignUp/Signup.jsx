@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useNavigate } from "react-router-dom";
+import { SignupUserApi } from "../../api/users";
 
 const SignUpSchema = Yup.object().shape({
   firstName: Yup.string().required("Required").min(2, "Too Short"),
@@ -37,10 +38,15 @@ export default function SignUp() {
       confirmPassword: "",
     },
     validationSchema: SignUpSchema,
-    onSubmit: (values) => {
-      // Handle form submission, create user, etc.
-      console.log(values);
-      navigate("/verify_mobile");
+    onSubmit: async (data) => {
+     const response = await  SignupUserApi(data);
+     console.log(response);
+     if (response.success) {
+          console.log(response);
+          localStorage.setItem("mobileNumber", data.mobileNumber);
+          navigate("/verify_mobile");
+     }
+    
     },
   });
 
@@ -58,7 +64,7 @@ export default function SignUp() {
           Sign up
         </Typography>
         <Box component="form" onSubmit={formik.handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
+          <TextField     
             margin="normal"
             required
             fullWidth

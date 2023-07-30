@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Container, Typography, Box, TextField, Button,Link } from "@mui/material";
+import { sendSms } from "./Firebase/send";
+import { firebaseConfig } from "./Firebase/config";
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithPhoneNumber, RecaptchaVerifier   } from "firebase/auth";
 
+initializeApp(firebaseConfig);
 const MobileOTPVerificationPage = () => {
   const [otp, setOTP] = useState(["", "", "", "", "", ""]);
   const [remainingTime, setRemainingTime] = useState(60);
@@ -12,6 +17,36 @@ const MobileOTPVerificationPage = () => {
       return () => clearTimeout(timer);
     }
   }, [remainingTime]);
+ 
+
+  useEffect(() => {
+    const mobileNumber = localStorage.getItem("mobileNumber");
+    const auth = getAuth();
+   
+auth.languageCode = 'it';
+window.recaptchaVerifier = new RecaptchaVerifier(auth, 'sign-in-button', {
+  'size': 'invisible',
+  'callback': (response) => {
+    // reCAPTCHA solved, allow signInWithPhoneNumber.
+    onSignInSubmit();
+  }
+});
+      console.log({mobileNumber});
+    console.log(parseInt(mobileNumber));
+    sendSms(mobileNumber);
+    return signInWithPhoneNumber(auth, mobileNumber, window.recaptchaVerifier)
+    .then((confirmationResult) => {
+      console.log("SMS sent");
+      // SMS sent. Prompt user to type the code from the message, then sign the
+      // user in with confirmationResult.confirm(code).
+      // window.confirmationResult = confirmationResult;
+      // ...
+    })
+    .catch((error) => {
+      // Error; SMS not sent
+      console.error("Error sending SMS:", error);
+    });
+  }, []);
 
   const handleOTPChange = (index) => (event) => {
     const { value } = event.target;
@@ -44,6 +79,8 @@ const MobileOTPVerificationPage = () => {
   const handleSubmit = () => {
     // TODO: Implement OTP verification and form submission here
     console.log("Submitted OTP:", otp.join(""));
+   
+    
   };
 
   return (

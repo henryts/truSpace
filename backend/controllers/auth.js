@@ -1,42 +1,49 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../models/userModel.js";
+//import User from "../models/userModel.js";
+import user from "../models/userModel.js";
 
-
-export const register = async (req, res) => {
-  try {
-      const {
-      firstName,
-      lastName,
-      email,
-      password,
-      picturePath,
-      friends,
-      location,
-      occupation,
-    } = req.body;
-
-    const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
-
-    const newUser = new User({
-      firstName,
-      lastName,
-      email,
-      password: passwordHash,
-      picturePath,
-      friends,
-      location,
-      occupation,
-      viewedProfile: Math.floor(Math.random() * 10000),
-      impressions: Math.floor(Math.random() * 10000),
-    });
-    const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
+export  const 
+signup = async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    userName,
+    mobileNumber,
+    email,
+    password,
+  } = req.body;
+      
+      const emailExist = await user.findOne({ email: email });
+      const mobileExist = await user.findOne({ mobileNumber: mobileNumber });
+  
+      if (emailExist || mobileExist) {
+        res.status(200).send({
+          success: false,
+          message: "Email or Phone already exists",
+        });
+      } 
+      
+      else {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        const newUser = new user({
+          firstName,
+          lastName,
+          userName,
+          mobileNumber,
+           email,
+          password:hashedPassword 
+          
+        });
+         console.log(newUser);
+        await newUser.save();
+        res.status(200).send({
+          success:true,
+          message:'Regitered successfully'
+        })
+      }
+    }
 
 
 export const login = async (req, res) => {

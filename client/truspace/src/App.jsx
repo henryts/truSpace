@@ -2,14 +2,14 @@ import { useState } from 'react'
 
 import './App.css';
 
-import Routez from './routes/Routes'
+import Routs from './routes/Routes'
 
 function App() {
  
 
   return (
     <>
-    <Routez/>
+    <Routs/>
     </>
   )
 }

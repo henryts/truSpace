@@ -14,6 +14,18 @@ const UserSchema = new mongoose.Schema(
       min: 2,
       max: 50,
     },
+    userName: {
+      type: String,
+      required: true,
+      min: 2,
+      max: 50,
+    },
+    mobileNumber:{
+      type:Number,
+      required:true,
+      unique:true
+    },
+
     email: {
       type: String,
       required: true,
@@ -33,8 +45,8 @@ const UserSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    location: String,
-    occupation: String,
+    // location: String,
+    // occupation: String,
     viewedProfile: Number,
     impressions: Number,
   },

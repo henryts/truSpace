@@ -1,53 +1,57 @@
-import React, { useState, useEffect, useRef } from "react";
+import  { useNavigate } from "react-router-dom";
 import { Container, Typography, Box, TextField, Button,Link } from "@mui/material";
-import { sendSms } from "./Firebase/send";
-import { firebaseConfig } from "./Firebase/config";
-import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPhoneNumber, RecaptchaVerifier   } from "firebase/auth";
+import { useState,useEffect,useRef} from "react";
 
-initializeApp(firebaseConfig);
+import { auth } from "./Firebase/config";
+
+import { getAuth, signInWithPhoneNumber, RecaptchaVerifier   } from "firebase/auth";
+//import * as firebase from 'firebase';
+
+
 const MobileOTPVerificationPage = () => {
   const [otp, setOTP] = useState(["", "", "", "", "", ""]);
   const [remainingTime, setRemainingTime] = useState(60);
   const inputRefs = useRef([]);
-
-  useEffect(() => {
-    if (remainingTime > 0) {
-      const timer = setTimeout(() => setRemainingTime((prevTime) => prevTime - 1), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [remainingTime]);
+  const navigate = useNavigate();
+  // useEffect(() => {
+  //   if (remainingTime > 0) {
+  //     const timer = setTimeout(() => setRemainingTime((prevTime) => prevTime - 1), 1000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [remainingTime]);
  
 
   useEffect(() => {
-    const mobileNumber = localStorage.getItem("mobileNumber");
-    const auth = getAuth();
-   
-auth.languageCode = 'it';
-window.recaptchaVerifier = new RecaptchaVerifier(auth, 'sign-in-button', {
-  'size': 'invisible',
-  'callback': (response) => {
-    // reCAPTCHA solved, allow signInWithPhoneNumber.
-    onSignInSubmit();
-  }
-});
-      console.log({mobileNumber});
-    console.log(parseInt(mobileNumber));
-    sendSms(mobileNumber);
-    return signInWithPhoneNumber(auth, mobileNumber, window.recaptchaVerifier)
-    .then((confirmationResult) => {
-      console.log("SMS sent");
-      // SMS sent. Prompt user to type the code from the message, then sign the
-      // user in with confirmationResult.confirm(code).
-      // window.confirmationResult = confirmationResult;
-      // ...
-    })
-    .catch((error) => {
-      // Error; SMS not sent
-      console.error("Error sending SMS:", error);
-    });
-  }, []);
+    let mobileNumber = localStorage.getItem("mobileNumber");
+    sendOtp("+91" + mobileNumber);
+  }, []); // Empty dependency array makes this effect run only once, when the component mounts
 
+
+  const sendOtp = async (mobileNumber) => {
+    try {
+      auth.useDeviceLanguage();
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha', {
+        'size': 'normal',
+        'callback': (response) => {
+
+        }
+      });
+      console.log(mobileNumber);
+      let confirmation = await signInWithPhoneNumber(auth, mobileNumber, window.recaptchaVerifier) .then((confirmationResult) => {
+     
+        console.log({confirmationResult});
+        window.confirmationResult = confirmationResult;
+        // ...
+      });
+  
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  
+  // let mobileNumber = localStorage.getItem("mobileNumber");
+  // sendOtp( '+91'+mobileNumber);
   const handleOTPChange = (index) => (event) => {
     const { value } = event.target;
     setOTP((prevOTP) => {
@@ -63,10 +67,27 @@ window.recaptchaVerifier = new RecaptchaVerifier(auth, 'sign-in-button', {
       inputRefs.current[index + 1].focus();
     }
   };
+  const verifyOtp = (input) => {
+    confirmationResult.confirm(input).then((result) => {
+      const user = result.user;
+      console.log("otp success");
+        navigate("/");
+      // ...
+    }).catch((error) => {
+      // User couldn't sign in (bad verification code?)
+      console.log("otp failed");
+      // ...
+    });
+  }
+  
+
 
   const handleResendOTP = () => {
     // TODO: Implement resend OTP functionality here
     console.log("Resend OTP");
+     
+ 
+
   };
 
   const handleKeyDown = (index) => (event) => {
@@ -79,7 +100,7 @@ window.recaptchaVerifier = new RecaptchaVerifier(auth, 'sign-in-button', {
   const handleSubmit = () => {
     // TODO: Implement OTP verification and form submission here
     console.log("Submitted OTP:", otp.join(""));
-   
+    verifyOtp( otp.join(""))
     
   };
 
@@ -116,6 +137,7 @@ window.recaptchaVerifier = new RecaptchaVerifier(auth, 'sign-in-button', {
             />
           ))}
         </Box>
+        <div id="recaptcha"></div>
         <Box mt={3}>
           {remainingTime > 0 ? (
             <Typography variant="subtitle2">

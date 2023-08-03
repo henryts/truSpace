@@ -1,12 +1,22 @@
-import  { useNavigate } from "react-router-dom";
-import { Container, Typography, Box, TextField, Button,Link } from "@mui/material";
-import { useState,useEffect,useRef} from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Button,
+  Link,
+} from "@mui/material";
+import { useState, useEffect, useRef } from "react";
 
 import { auth } from "./Firebase/config";
 
-import { getAuth, signInWithPhoneNumber, RecaptchaVerifier   } from "firebase/auth";
+import {
+  getAuth,
+  signInWithPhoneNumber,
+  RecaptchaVerifier,
+} from "firebase/auth";
 //import * as firebase from 'firebase';
-
 
 const MobileOTPVerificationPage = () => {
   const [otp, setOTP] = useState(["", "", "", "", "", ""]);
@@ -19,37 +29,34 @@ const MobileOTPVerificationPage = () => {
   //     return () => clearTimeout(timer);
   //   }
   // }, [remainingTime]);
- 
 
   useEffect(() => {
     let mobileNumber = localStorage.getItem("mobileNumber");
     sendOtp("+91" + mobileNumber);
-  }, []); // Empty dependency array makes this effect run only once, when the component mounts
-
+  }, []);
 
   const sendOtp = async (mobileNumber) => {
     try {
       auth.useDeviceLanguage();
-      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha', {
-        'size': 'normal',
-        'callback': (response) => {
-
-        }
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha", {
+        size: "normal",
+        callback: (response) => {},
       });
       console.log(mobileNumber);
-      let confirmation = await signInWithPhoneNumber(auth, mobileNumber, window.recaptchaVerifier) .then((confirmationResult) => {
-     
-        console.log({confirmationResult});
+      let confirmation = await signInWithPhoneNumber(
+        auth,
+        mobileNumber,
+        window.recaptchaVerifier
+      ).then((confirmationResult) => {
+        console.log({ confirmationResult });
         window.confirmationResult = confirmationResult;
         // ...
       });
-  
     } catch (err) {
       console.log(err);
     }
   };
-  
-  
+
   // let mobileNumber = localStorage.getItem("mobileNumber");
   // sendOtp( '+91'+mobileNumber);
   const handleOTPChange = (index) => (event) => {
@@ -68,26 +75,24 @@ const MobileOTPVerificationPage = () => {
     }
   };
   const verifyOtp = (input) => {
-    confirmationResult.confirm(input).then((result) => {
-      const user = result.user;
-      console.log("otp success");
+    confirmationResult
+      .confirm(input)
+      .then((result) => {
+        const user = result.user;
+        console.log("otp success");
         navigate("/");
-      // ...
-    }).catch((error) => {
-      // User couldn't sign in (bad verification code?)
-      console.log("otp failed");
-      // ...
-    });
-  }
-  
-
+        // ...
+      })
+      .catch((error) => {
+        // User couldn't sign in (bad verification code?)
+        console.log("otp failed");
+        // ...
+      });
+  };
 
   const handleResendOTP = () => {
     // TODO: Implement resend OTP functionality here
     console.log("Resend OTP");
-     
- 
-
   };
 
   const handleKeyDown = (index) => (event) => {
@@ -100,8 +105,7 @@ const MobileOTPVerificationPage = () => {
   const handleSubmit = () => {
     // TODO: Implement OTP verification and form submission here
     console.log("Submitted OTP:", otp.join(""));
-    verifyOtp( otp.join(""))
-    
+    verifyOtp(otp.join(""));
   };
 
   return (
@@ -149,7 +153,12 @@ const MobileOTPVerificationPage = () => {
             </Link>
           )}
         </Box>
-        <Button variant="contained" color="primary" onClick={handleSubmit} mt={3}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSubmit}
+          mt={3}
+        >
           Submit
         </Button>
       </Box>

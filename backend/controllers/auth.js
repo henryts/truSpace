@@ -49,17 +49,27 @@ signup = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email: email });
-    console.log("in login route:",user);
-    if (!user) return res.status(400).json({ msg: "User does not exist. " });
+    console.log(req.body);
+    const userdet = await user.findOne({ email: email });
+    
+    if (!userdet) return res.status(400).json({ msg: "User does not exist. " });
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    console.log({isMatch});
-    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials."});
+    const isMatch = await bcrypt.compare(password, userdet.password);
+  
+    if (!isMatch) return  res.status(400).send({
+      success: false,
+      message: "Invalid credentials",
+    });
     
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    delete user.password;
-    res.status(200).json({ token, user });
+    delete userdet.password;
+    //res.status(200).json({ token, userdet });
+      res.status(200).send({
+          userInfo:userdet,
+          success: true,
+          message: "Logged in successfully",
+          accessToken: token
+        });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

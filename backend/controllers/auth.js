@@ -1,10 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-//import User from "../models/userModel.js";
+import asyncErrorHandler from "../errors/asyncErrorHandler.js";
 import user from "../models/userModel.js";
 
-export  const 
-signup = async (req, res) => {
+export  const signup =asyncErrorHandler( async (req, res,next) => {
   const {
     firstName,
     lastName,
@@ -43,11 +42,11 @@ signup = async (req, res) => {
           message:'Regitered successfully'
         })
       }
-    }
+    });
 
 
-export const login = async (req, res) => {
-  try {
+export const login = asyncErrorHandler( async (req, res,next) => {
+ 
     const { email, password } = req.body;
     console.log(req.body);
     const userdet = await user.findOne({ email: email });
@@ -70,7 +69,7 @@ export const login = async (req, res) => {
           message: "Logged in successfully",
           accessToken: token
         });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+  // } catch (err) {
+  //   res.status(500).json({ error: err.message });
   }
-};
+);

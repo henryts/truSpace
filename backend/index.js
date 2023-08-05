@@ -8,6 +8,7 @@ import multer from "multer";
 import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
+
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 //import users from "./routes/users.js";
@@ -18,7 +19,11 @@ import { verifyToken } from "./middleware/auth.js";
 import User from "./models/userModel.js";
 
 import Post from "./models/Post.js";
+import CustomError from "./errors/customError.js";
+import globalErrorHandler from "./errors/errorController.js";
 //import { users, posts } from "./data/index.js";
+
+
 
 /* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);
@@ -53,6 +58,14 @@ app.post("/posts", verifyToken, upload.single("picture"), createPost);
 app.use("/auth", authRoutes);
 //app.use("/users", users);
 app.use("/posts", postRoutes);
+
+/* Error handlers */
+app.all('*',(req,res,next)=>{
+  const err = new CustomError(`can't find the ${req.originalUrl} on the server !`,404);
+  next(err);
+  })
+  app.use(globalErrorHandler);
+  
 
 /* MONGOOSE SETUP */
 mongoose.set('strictQuery', true);

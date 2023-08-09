@@ -12,6 +12,12 @@ const  duplicateKeyErrorHandler = (err)=>{
   return new CustomError(msg,400)
 }
 
+const handleExpiredjwt = (err)=>{
+  return new CustomError("Session Expired ,Please login again",401)
+}
+const handleJwtError = (err)=>{
+  return new CustomError("Invalid Token.Please Login Again",401);
+}
 
 export default function globalErrorHandler (error,req,res,next){
   error.statusCode= error.statusCode ||500;
@@ -20,10 +26,12 @@ export default function globalErrorHandler (error,req,res,next){
   {
     castErrorHandler(error);
   }
-  if(error.code==11000)
+  if(error.code===11000)
   {
     error = duplicateKeyErrorHandler(error);
   }
+  if(error.name=== 'TokenExpiredError') error = handleExpiredjwt(error);
+  if(error.name==='JsonWebTokenError') error = handleJwtError(error);
   else{
   res.status(error.statusCode).json({
     status: error.statusCode,

@@ -43,6 +43,7 @@ const AddPost = () => {
   const [files, setFiles] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [postText,setPostText]=useState("");
+  const [postImg,setPostImg]=useState("");
  
   const handleClose = () => {
     setModalOpen(false);
@@ -55,8 +56,10 @@ const AddPost = () => {
     setSelectedImage(files[0]);
     setModalOpen(true);
     setDropzoneOpen(false);
+ //   console.log();
+  
   };
-
+ 
   const handleOpen = () => {
     setModalOpen(true);
     setDropzoneOpen(false);
@@ -65,17 +68,17 @@ const AddPost = () => {
   
   
   const userInfo = JSON.parse(localStorage.getItem('userdet'));
-  const resolvedFiles = await files; // Make sure 'files' is awaited here
-  console.log(resolvedFiles[0].path);
-  const payload = {
-    userId: userInfo._id,
-    description: postText,
-    picturePath: resolvedFiles[0].path
-  };
+  const resolvedFiles = await files;
 
-  try {
-    const response = await newPostApi( payload);
-    console.log('Post created successfully:', response.data);
+  if (resolvedFiles[0]) {
+    const formData = new FormData();
+    formData.append('userId', userInfo._id);
+    formData.append('description', postText);
+    formData.append('picturePath', resolvedFiles[0]);
+
+    try {
+      const response = await newPostApi(formData); 
+      console.log('Post created successfully:', response.data);
       
     // Close the modal and reset state
     handleClose();
@@ -83,7 +86,7 @@ const AddPost = () => {
     console.error('Error creating post:', error);
   }
 };
- 
+}
   return (
     <>
       <Tooltip

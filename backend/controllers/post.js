@@ -1,36 +1,36 @@
 import Post from "../models/Post.js";
 import User from "../models/userModel.js";
 import asyncErrorHandler from "../errors/asyncErrorHandler.js";
-import cloudinary from "../config/cloudinary.js";
+
 /* CREATE */
 export const createPost = asyncErrorHandler(async (req, res) => {
-  try {
-    console.log("in new post");
-   const { userId, description, picturePath } = req.body;
-    console.log(req.body,"from creatpost");
-     
+  console.log("in new post");
+  const { userId, description } = req.body;
+  if (req.file) {
+    // Check if req.file exists
+    const picturePath = req.file.path;
 
-  
-
-
-    const user = await User.findById(userId);
-    const newPost = new Post({
-      userId,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      location: user.location,
-      description,
-      userPicturePath: user.picturePath,
-      picturePath,
-      likes: {},
-      comments: [],
-    });
-    await newPost.save();
-
-    const post = await Post.find();
-    res.status(201).json(post);
-  } catch (err) {
-    res.status(409).json({ message: err.message });
+    try {
+      const user = await User.findById(userId);
+      const newPost = new Post({
+        userId,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        location: user.location,
+        description,
+        userPicturePath: user.picturePath,
+        picturePath: picturePath,
+        likes: {},
+        comments: [],
+      });
+      await newPost.save();
+      res.status(201).json({ data: userId });
+    } catch (error) {
+      res.status(500).json({ message: "Error uploading image" });
+    }
+  } else {
+    // Handle the case where no file was uploaded
+    res.status(400).json({ message: "No image uploaded" });
   }
 });
 

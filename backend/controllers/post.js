@@ -1,10 +1,18 @@
 import Post from "../models/Post.js";
 import User from "../models/userModel.js";
-
+import asyncErrorHandler from "../errors/asyncErrorHandler.js";
+import cloudinary from "../config/cloudinary.js";
 /* CREATE */
-export const createPost = async (req, res) => {
+export const createPost = asyncErrorHandler(async (req, res) => {
   try {
-    const { userId, description, picturePath } = req.body;
+    console.log("in new post");
+   const { userId, description, picturePath } = req.body;
+    console.log(req.body,"from creatpost");
+     
+
+  
+
+
     const user = await User.findById(userId);
     const newPost = new Post({
       userId,
@@ -24,7 +32,7 @@ export const createPost = async (req, res) => {
   } catch (err) {
     res.status(409).json({ message: err.message });
   }
-};
+});
 
 /* READ */
 export const getFeedPosts = async (req, res) => {

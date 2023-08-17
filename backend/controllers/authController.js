@@ -1,8 +1,9 @@
-import bcrypt from "bcrypt";
+import argon2 from 'argon2';
 import jwt from "jsonwebtoken";
 import asyncErrorHandler from "../errors/asyncErrorHandler.js";
 import user from "../models/userModel.js";
 import CustomError from "../errors/customError.js";
+import cloudinary from "../config/cloudinary.js";
 
 
 const signToken=id=>{
@@ -12,17 +13,20 @@ const signToken=id=>{
 }
 
 export  const signup =asyncErrorHandler( async (req, res,next) => {
+
   const {
     firstName,
     lastName,
     userName,
-    mobileNumber,
+    mobileNumber, 
     email,
     password,
+    picturePath
   } = req.body;
       
       const emailExist = await user.findOne({ email: email });
       const mobileExist = await user.findOne({ mobileNumber: mobileNumber });
+
   
       if (emailExist || mobileExist) {
         res.status(200).send({
@@ -32,21 +36,27 @@ export  const signup =asyncErrorHandler( async (req, res,next) => {
       } 
       
       else {
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+       // const salt = await bcrypt.genSalt(12);
+       const hashedPassword =  await argon2.hash(password);
         const newUser = new user({
           firstName,
           lastName,
           userName,
           mobileNumber,
            email,
+         picturePath,
           password:hashedPassword 
           
         });
-         console.log(newUser);
+        try{
+  
         await newUser.save();
+        }catch(error)
+        {
+          console.log(error);
+        }
         res.status(200).send({
-          success:true,
+            success:true,
           message:'Regitered successfully'
         })
       }
@@ -67,7 +77,7 @@ export  const signup =asyncErrorHandler( async (req, res,next) => {
 //       message: "Invalid credentials",
 //     });
     
-//     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+//     const token = jwt.sign({ id: userdet._id }, process.env.JWT_SECRET);
 //     delete userdet.password;
 //     //res.status(200).json({ token, userdet });
 //       res.status(200).send({
@@ -82,28 +92,25 @@ export  const signup =asyncErrorHandler( async (req, res,next) => {
 // );
 
 export const login = asyncErrorHandler( async (req, res,next) => {
-
+   
   const { email, password } = req.body;
-  
-  if(!email||!password)
-  {
-    const error= new CustomError('Please provide email Id & passwod for login!', 400);
-    return next(error);
-  }
+  console.log(req.body, "login");
 
-  const userdet = await user.findOne({ email: email }).select('+password');
-  
-  if(!userdet||!(await userdet.comparePasswordInDb(password,userdet.password)))
-  {
-    const error = new CustomError('Incorrect email or Password',400);
+  var userdet = await user.findOne({ email: email });
+ 
+  console.log(await argon2.verify(userdet.password, password), "result");
+  console.log(userdet);
+  if (!userdet || !(await argon2.verify(userdet.password, password))) {
+    const error = new CustomError("Incorrect email or Password", 400);
     return next(error);
   }
   const token = signToken(userdet._id);
-   res.status(200).json({
-      status: 'success',
-      token  ,
-      userdet
-
-   })
-
+  console.log({token});
+  console.log({ token }, "Token");
+  res.status(200).json({
+    status: "success",
+    token,
+    userdet,
+  });
+  
 });

@@ -1,12 +1,15 @@
 import express from "express";
-import { getFeedPosts, getUserPosts, likePost } from "../controllers/post.js";
+import {createPost, getFeedPosts, getUserPosts, likePost } from "../controllers/post.js";
 import { verifyToken } from "../middleware/auth.js";
 import { protect } from "../middleware/auth.js";
+import { uploadprofile } from "../config/multer.js";
 
 const router = express.Router();
 
+router.post("/newPost", uploadprofile,createPost); //protect,
 /* READ */
-router.get("/", protect, getFeedPosts);
+
+router.get("/",  verifyToken, getFeedPosts);
 router.get("/:userId/posts", verifyToken, getUserPosts);
 
 /* UPDATE */

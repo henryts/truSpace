@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 function Feed() {
   return (
   
-    <Box flex={4} p={2}>
+    <Box flex={2} p={2} marginLeft={10} sx={{marginLeft:"80px"}}>
     <Post/>
     <Post/>
     <Post/>

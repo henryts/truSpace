@@ -9,6 +9,9 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MailIcon from '@mui/icons-material/Mail';
+import { useDispatch } from 'react-redux';
+import { setlogout } from '../../../redux/Features/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -46,12 +49,21 @@ const Icons = styled("Box")(({theme}) => ({
  }));
 
 function Navbar() {
+  const dispatch  = useDispatch();
     const [open,setOpen] = useState(false);
+    const navigate= useNavigate();
+    const handleLogout = () => {
+      
+      
+      dispatch(setlogout());
+      localStorage.removeItem('token'); 
+      navigate('/');
+    }
   return (
     <AppBar position='sticky' >
         <StyledToolbar>
     <MenuIcon  sx={{display:{md:"none",lg:"none",xs:"block",sm:"block"} }}/>
-   <Typography variant='h6' sx={{display:{xs:"none" ,sm:"block"}}}>Cavil Rev</Typography>
+   <Typography variant='h6' sx={{display:{xs:"none" ,sm:"block"}}}>truSpace</Typography>
 
    <Search><InputBase placeholder='search...'></InputBase></Search>
    {/* <PetsIcon sx = {{display:{xs:"block", sm:"block"}}}/> */}
@@ -93,7 +105,7 @@ onClick= {(e)=>setOpen(true)}
       >
         <MenuItem >Profile</MenuItem>
         <MenuItem >My account</MenuItem>
-        <MenuItem >Logout</MenuItem>
+        <MenuItem onClick={()=>handleLogout()} >Logout</MenuItem>
       </Menu>
    
     </AppBar>

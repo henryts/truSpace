@@ -10,11 +10,13 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container"; 
-import { LoginUserApi } from "../../api/users";
+import { LoginUserApi } from "../../api/usersApi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify"; 
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import { useDispatch } from "react-redux";
+import { setCredential } from "../../redux/Features/authSlice";
 
 
 const validationSchema = Yup.object({
@@ -22,20 +24,23 @@ const validationSchema = Yup.object({
   password: Yup.string().required("Required"),
 });
 
-export default function SignIn() {
-  const navigate = useNavigate()
+export default function Login() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleSubmit = async(data) => {
     
     const response = await LoginUserApi(data);
-    console.log({data});
+    console.log(response);
+ 
    console.log({response});
-    if (response.success) {
+    if (response.status) {
        toast.success(response.message);
       console.log({response});
-      localStorage.setItem('token',JSON.stringify(response.accessToken));
-      localStorage.setItem('userInfo', JSON.stringify(response.userInfo));
-     // dispatch(setCredential(response.userInfo))
+      localStorage.setItem('token',JSON.stringify(response.token));
+      localStorage.setItem('userdet', JSON.stringify(response.userdet));
+      dispatch(setCredential(response));
       navigate('/home');
+   
     }
        else{
         toast.error("Invalid credentials");

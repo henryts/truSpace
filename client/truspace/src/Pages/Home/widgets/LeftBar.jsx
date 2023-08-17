@@ -15,15 +15,26 @@ import PersonIcon from '@mui/icons-material/Person';
 import ModeNightIcon from '@mui/icons-material/ModeNight';
 import Switch from '@mui/material/Switch';
 import DraftsIcon from '@mui/icons-material/Drafts';
-
+import {Avatar} from '@mui/material';
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
-function LeftBar() {
+function LeftBar(userInfo ) {
+  console.log("left",userInfo);
+  const userDetails=userInfo.userInfo
+  const userProfile = {
+    user: userInfo.userInfo,
+  
+    profileImage: 'https://szcdn.ragalahari.com/aug2022/hd/dulquer-salman-sitaramam-interview/dulquer-salman-sitaramam-interviewthumb.jpg', // Replace with the URL of the profile image
+  };
   return (
     <Box sx={{ width: '100%',
-     maxWidth: 360, 
-     bgcolor: 'background.paper'  }}>
-      <Box position="fixed">
+     maxWidth: 250, 
+     bgcolor: 'background.paper',display:{xs:"none", sm:"block"}  }}>
+      <Box position="fixed" marginLeft={3} marginTop={4}>
+      <Box textAlign="center" marginBottom={3}>
+          <Avatar alt={userProfile.user.firstName} src={userProfile.profileImage} sx={{ width: 84, height: 84, margin: '0 auto' }} />
+          <p>{userDetails.firstName+" "+userDetails.lastName}</p>
+        </Box>
     <nav aria-label="main mailbox folders">
       <List>
         <ListItem disablePadding>

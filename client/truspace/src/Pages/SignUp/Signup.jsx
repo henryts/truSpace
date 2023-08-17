@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Button from "@mui/material/Button";
@@ -11,7 +11,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useNavigate } from "react-router-dom";
-import { SignupUserApi } from "../../api/users";
+import { SignupUserApi } from "../../api/usersApi";
+
+
 
 const SignUpSchema = Yup.object().shape({
   firstName: Yup.string().required("Required").min(2, "Too Short"),
@@ -23,10 +25,12 @@ const SignUpSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "Passwords must match")
     .required("Required"),
+    
 });
 
 export default function SignUp() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+ 
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -36,11 +40,13 @@ export default function SignUp() {
       email: "",
       password: "",
       confirmPassword: "",
+      picturePath: null
     },
     validationSchema: SignUpSchema,
     onSubmit: async (data) => {
+      console.log({data});
      const response = await  SignupUserApi(data);
-     console.log(response);
+     console.log({response});
      if (response.success) {
           console.log(response);
           localStorage.setItem("mobileNumber", data.mobileNumber);
@@ -49,7 +55,7 @@ export default function SignUp() {
     
     },
   });
-
+ 
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -127,6 +133,7 @@ export default function SignUp() {
             error={formik.touched.email && Boolean(formik.errors.email)}
             helperText={formik.touched.email && formik.errors.email}
           />
+            
           <TextField
             margin="normal"
             required

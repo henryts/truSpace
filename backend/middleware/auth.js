@@ -27,18 +27,22 @@ export const verifyToken = async (req, res, next) => {
 export const protect = asyncErrorHandler( async (req, res,next) => {
 
   const testToken = req.headers.authorization;
-  console.log({testToken});
+ 
   let token;
-  if(testToken && testToken.startsWith('bearer'))
+  if(testToken && testToken.startsWith('Bearer'))
   {
     token=testToken.split(' ')[1];
   }
+
   if(!token)
   {
     next(new CustomError("you are not logged in!",401));
   }
+
   const decodedToken = await util.promisify(jwt.verify)(token,process.env.JWT_SECRET);
+  console.log(decodedToken);
   const userdet = await User.findById(decodedToken.id);
+ 
   if(!userdet)
   {
     const error = new CustomError('The user with given token does not exist',401);
@@ -46,5 +50,6 @@ export const protect = asyncErrorHandler( async (req, res,next) => {
   }
   //skiped password changed case
   req.user= userdet;
+  console.log("next");
   next();
 })

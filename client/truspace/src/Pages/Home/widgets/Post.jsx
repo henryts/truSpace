@@ -17,9 +17,10 @@ import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 
+
 export default function Post() {
   return (
-    <Card sx={{width:"600px"}}>
+    <Card sx={{ width: "100%", maxWidth: 550, margin: "0 auto", marginBottom: 5,marginLeft:10 }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -31,7 +32,7 @@ export default function Post() {
             <MoreVertIcon />
           </IconButton>
         }
-         title="Shrimp and Chorizo Paella"
+        title="Shrimp and Chorizo Paella"
         subheader="September 14, 2016"
       />
       <CardMedia
@@ -48,9 +49,9 @@ export default function Post() {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-      <IconButton aria-label="share" color='red'>
-      <Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite sx={{color:"red"}} />} />
-      </IconButton>
+        <IconButton aria-label="share" color='red'>
+          <Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite sx={{ color: "red" }} />} />
+        </IconButton>
         <IconButton aria-label="share" color='red'>
           <ShareIcon />
         </IconButton>

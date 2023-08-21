@@ -40,7 +40,7 @@ export default function SignUp() {
       email: "",
       password: "",
       confirmPassword: "",
-      picturePath: null
+      profilePhoto: null
     },
     validationSchema: SignUpSchema,
     onSubmit: async (data) => {

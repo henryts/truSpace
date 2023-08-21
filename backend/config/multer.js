@@ -26,5 +26,6 @@ const storageOptions = {
 const storage = new CloudinaryStorage(storageOptions);
 
 export const uploadprofile = multer({ storage: storage }).single("picturePath");
-const uploadCompanylogo = multer({ storage: storage }).single("companylogo");
+export const profilePhoto = multer({ storage: storage }).single("profilePhoto");
+
 

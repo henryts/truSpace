@@ -9,5 +9,15 @@ export const newPostApi = async (payload) => {
     console.log(err);
     return err.message;
   }
-};2
+};
+export const feedApi = async () => {
+  try {
+   console.log("in feed api ")
+    const response = await axiosUserInstance.get('/posts/feed');
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return err.message;
+  }
+};
 

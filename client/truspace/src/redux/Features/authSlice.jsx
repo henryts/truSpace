@@ -16,7 +16,7 @@ const authSlice = createSlice({
       state.userdet = action?.payload?.userdet;
 
       state.token = action?.payload?.token;
-      console.log(action);
+      console.log({action});
     },
     setlogout: (state, action) => {
       state.userdet = null;
@@ -24,8 +24,10 @@ const authSlice = createSlice({
 
       console.log(state.userdet, "inslice");
     },
-  },
-});
+    updateProfilePhotoInState: (state, action) => {
+      state.userdet.profilePhoto = action.payload;
+  }
+}});
 
-export const { setCredential, setlogout } = authSlice.actions;
+export const { setCredential, setlogout, updateProfilePhotoInState } = authSlice.actions;
 export default authSlice.reducer;

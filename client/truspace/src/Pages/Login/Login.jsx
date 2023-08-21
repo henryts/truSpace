@@ -30,12 +30,8 @@ export default function Login() {
   const handleSubmit = async(data) => {
     
     const response = await LoginUserApi(data);
-    console.log(response);
- 
-   console.log({response});
     if (response.status) {
-       toast.success(response.message);
-      console.log({response});
+      toast.success(response.message);
       localStorage.setItem('token',JSON.stringify(response.token));
       localStorage.setItem('userdet', JSON.stringify(response.userdet));
       dispatch(setCredential(response));

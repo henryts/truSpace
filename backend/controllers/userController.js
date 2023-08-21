@@ -1,86 +1,38 @@
-// import postMessage from "../models/postMessage.js"
-// import user from "../models/userModel.js";
-// import bcrypt from 'bcrypt';
-// import jwt from 'jsonwebtoken';
+import User from "../models/userModel.js";
+import asyncErrorHandler from "../errors/asyncErrorHandler.js";
 
 
-// export  const signup = async (req, res) => {
-//   const {
-//     firstName,
-//     lastName,
-//     userName,
-//     mobileNumber,
-//     email,
-//     password,
-//   } = req.body;
-//      const payload =req.body
-//       console.log("data recieved",payload);
-//       // res.status(200).send({
-//       //   success:true,
-//       //   message:'Regitered successfully'
-//       // })
-//       const emailExist = await user.findOne({ email: email });
-//       const mobileExist = await user.findOne({ mobile: mobile });
-  
-//       if (emailExist || mobileExist) {
-//         res.status(200).send({
-//           success: false,
-//           message: "Email or Phone already exists",
-//         });
-//       } 
-      
-//       else {
-//         const salt = await bcrypt.genSalt(10);
-//         const hashedPassword = await bcrypt.hash(password, salt);
-//         const newUser = new user({
-//           firstName,
-//           lastName,
-//           userName,
-//           mobileNumber,
-//            email,
-//           password:hashedPassword 
-          
-//         });
-//          console.log(newUser);
-//         await newUser.save();
-//         res.status(200).send({
-//           success:true,
-//           message:'Regitered successfully'
-//         })
-//       }
-//     }
 
-//   export const  login = async (req, res) => {
-//       const { email, password, rememberme } = req.body;
-//       console.log(req.body);
-//       const User = await user.findOne({ email: email });
-//       if (User) {
-//         const verifyPassword = await bcrypt.compare(password, User.password);
-//         if (verifyPassword) {
-//           const userId = User._id;
-//           const secret = process.env.JWT_SECRET;
-//           const accessToken = jwt.sign({ userId, role: "user" }, secret, {
-//             expiresIn: "1d",
-//           });
-//           res.status(200).send({
-//             userInfo:User,
-//             success: true,
-//             message: "Logged in successfully",
-//             accessToken: accessToken
-//           });
-//         } else {
-//           res.status(200).send({
-//             success: false,
-//             message: "Invalid Password",
-//           });
-//         }
-//       } else {
-//         res.status(200).send({
-//           success: false,
-//           message: "User Not Exists!",
-//         });
-//       }
-//     }
+export const updateProfilePhoto = asyncErrorHandler(async(req,res)=>{
+    
+ 
+  console.log("inside update photo");
+     console.log(req.file);
+     let file = req.file;
+     let body = req.body;
+     console.log({file});
+     console.log({body});
+     const cloudinaryUrl = req.file?.path;
+     const userId = req.body.userId; // Replace with the actual user ID
+      User.findByIdAndUpdate(
+    userId,
+    { $set: { profilePhoto: cloudinaryUrl } },
+    { new: true }, // Return the updated document
+    (err, updatedUser) => {
+     if (err) {
+       console.error(err);
+      // Handle the error
+    } else {
+      console.log('Profile photo updated:', updatedUser);
+      res.status(201).json({ data: updatedUser });
+    }
+  }
+);
 
-//    // export default signup;
-   
+
+
+})
+
+
+
+

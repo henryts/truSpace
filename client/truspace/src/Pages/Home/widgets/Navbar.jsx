@@ -48,7 +48,7 @@ const Icons = styled("Box")(({theme}) => ({
   
  }));
 
-function Navbar() {
+function Navbar(userInfo) {
   const dispatch  = useDispatch();
     const [open,setOpen] = useState(false);
     const navigate= useNavigate();
@@ -76,15 +76,14 @@ function Navbar() {
 
 </Badge>
 
-<Avatar alt="Remy Sharp" width="30px" height="30px" 
-src="https://images.pexels.com/photos/17042221/pexels-photo-17042221/free-photo-of-young-woman-in-eyeglasses-standing-on-a-basketball-court.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-onClick= {(e)=>setOpen(true)}
+<Avatar onClick= {()=>setOpen(true)} alt="Remy Sharp" width="30px" height="30px" 
+src={userInfo?.userInfo?.profilePhoto}
 />
 
 </Icons>
-< UserImage onClick= {(e)=>setOpen(true)}>
+< UserImage onClick= {()=>setOpen(true)}>
 <Typography variant='h8' sx={{display:{xs:"flex" ,sm:"flex"}}}>Cavil Rev</Typography>
-<Avatar alt="Remy Sharp" widt="25px" height="25px" src="https://images.pexels.com/photos/17042221/pexels-photo-17042221/free-photo-of-young-woman-in-eyeglasses-standing-on-a-basketball-court.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
+<Avatar alt="Remy Sharp" widt="25px" height="25px" src={userInfo?.userInfo?.profilePhoto} />
 
 </UserImage>
    </StyledToolbar>
@@ -93,7 +92,7 @@ onClick= {(e)=>setOpen(true)}
         aria-labelledby="demo-positioned-button"
        
         open={open}
-        onClose={(e)=>setOpen(false)}
+        onClose={()=>setOpen(false)}
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'right',

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import validator from 'validator';
 import bcrypt from "bcrypt";
+
 const UserSchema = new mongoose.Schema(
   {
     firstName: {
@@ -39,9 +40,9 @@ const UserSchema = new mongoose.Schema(
       type: String,
     
     },
-    picturePath: {
+    profilePhoto: {
       type: String,
-      default: "",
+      default: "../public/assets/default.png",
     },
     friends: {
       type: Array,

@@ -21,7 +21,7 @@ export  const signup =asyncErrorHandler( async (req, res,next) => {
     mobileNumber, 
     email,
     password,
-    picturePath
+    profilePhoto
   } = req.body;
       
       const emailExist = await user.findOne({ email: email });
@@ -43,8 +43,8 @@ export  const signup =asyncErrorHandler( async (req, res,next) => {
           lastName,
           userName,
           mobileNumber,
-           email,
-         picturePath,
+          email,
+          profilePhoto,
           password:hashedPassword 
           
         });

@@ -24,7 +24,7 @@ function App() {
 
   return (
     <Box>
-    <Navbar/>
+    <Navbar userInfo={parsedUserInfo} />
     <Box>
       <Stack direction={"row"} spacing={2}>
     <LeftBar userInfo={parsedUserInfo} />

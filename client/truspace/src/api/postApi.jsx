@@ -20,4 +20,14 @@ export const feedApi = async () => {
     return err.message;
   }
 };
-
+export const likeUnlikeApi = async (postid,userId,isLiked) => {
+  try {
+   
+   console.log("in like api ")
+    const response = await axiosUserInstance.patch(`/posts/${postid}/likeUnlike`,{userId,isLiked});
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return err.message;
+  }
+};

@@ -12,19 +12,20 @@ export const createPost = asyncErrorHandler(async (req, res) => {
 
     try {
       const user = await User.findById(userId);
+      console.log({user});
       const newPost = new Post({
         userId,
         firstName: user.firstName,
         lastName: user.lastName,
         location: user.location,
         description,
-        userPicturePath: user.picturePath,
+        userProfilePhoto: user.profilePhoto,
         picturePath: picturePath,
         likes: {},
         comments: [],
       });
       await newPost.save();
-      res.status(201).json({ data: userId });
+      res.status(201).json({ data: newPost });
     } catch (error) {
       res.status(500).json({ message: "Error uploading image" });
     }
@@ -37,7 +38,8 @@ export const createPost = asyncErrorHandler(async (req, res) => {
 /* READ */
 export const getFeedPosts = async (req, res) => {
   try {
-    const post = await Post.find();
+    const post = await Post.find().sort({ createdAt: -1 });
+    console.log({post});
     res.status(200).json(post);
   } catch (err) {
     res.status(404).json({ message: err.message });
@@ -55,13 +57,16 @@ export const getUserPosts = async (req, res) => {
 };
 
 /* UPDATE */
-export const likePost = async (req, res) => {
+export const likeUnlikePost = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log({id});
     const { userId } = req.body;
+    console.log({userId});
     const post = await Post.findById(id);
+  
     const isLiked = post.likes.get(userId);
-
+    //console.log(post);
     if (isLiked) {
       post.likes.delete(userId);
     } else {
@@ -73,7 +78,8 @@ export const likePost = async (req, res) => {
       { likes: post.likes },
       { new: true }
     );
-
+    const likeCount = Array.from(post.likes.values()).filter(Boolean).length;
+    console.log({likeCount});
     res.status(200).json(updatedPost);
   } catch (err) {
     res.status(404).json({ message: err.message });

@@ -18,22 +18,21 @@ function App() {
   
    const userInfo = localStorage.getItem('userdet');
    const parsedUserInfo = JSON.parse(userInfo);
-  console.log({parsedUserInfo});
-  console.log({userInfo});
- //  console.log({parsedUserInfo });
+
 
   return (
-    <Box>
+   <>
     <Navbar userInfo={parsedUserInfo} />
-    <Box>
+    
       <Stack direction={"row"} spacing={2}>
     <LeftBar userInfo={parsedUserInfo} />
-    <Feed />
+    <Feed userInfo={parsedUserInfo}/>
     <Rightbar/>
     </Stack>
-    </Box>
+  
    <AddPost/>
-    </Box>
+ 
+    </>
   )
 }
 

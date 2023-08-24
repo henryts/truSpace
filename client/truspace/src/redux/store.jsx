@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authStore from "./Features/authSlice";
+import feedReducer from "./Features/feedSlice";
 
 const loadState = () => {
   try {
@@ -26,6 +27,7 @@ const persistedState = loadState();
 const store = configureStore({
   reducer: {
     auth: authStore,
+    feed: feedReducer,
   },
   preloadedState: persistedState,
 });

@@ -28,19 +28,21 @@ function RightBar() {
   
     </Box>
     <Box  position = "fixed"  sx={{ marginTop:10 , width: 300,marginRight:50}}>
-    <Typography  cols={3} rowHeight={164} varient="h6" fontWeight={100} >My Photos</Typography>
-    <ImageList sx={{ width: 350, height: 450 }} cols={3} rowHeight={164}>
-      {itemData.map((item) => (
-        <ImageListItem key={item.img}>
-          <img
-            src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-            srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-            alt={item.title}
-            loading="lazy"
-          />
-        </ImageListItem>
-      ))}
-    </ImageList>
+    <Typography variant="h6" fontWeight={100}>
+          My Photos
+        </Typography>
+        <ImageList sx={{ width: 350, height: 450 }} cols={3}>
+          {itemData.map((item) => (
+            <ImageListItem key={item.img}>
+              <img
+                src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
+                srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                alt={item.title}
+                loading="lazy"
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
  
     </Box>
 

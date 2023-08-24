@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
+import { addPost } from "../../../redux/Features/feedSlice";
+
 import {
   Avatar,
   Button,
@@ -38,6 +40,7 @@ const UserBox = styled(Box)({
 });
 
 const AddPost = () => {
+  const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
   const [dropzoneOpen, setDropzoneOpen] = useState(false);
   const [files, setFiles] = useState([]);
@@ -79,6 +82,11 @@ const AddPost = () => {
     try {
       const response = await newPostApi(formData); 
       console.log('Post created successfully:', response.data);
+      if(response.data)
+      {
+        dispatch(addPost(response.data));
+        // onresponse(response.data);
+      }
       
     // Close the modal and reset state
     handleClose();

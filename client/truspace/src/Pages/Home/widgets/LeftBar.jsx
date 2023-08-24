@@ -28,7 +28,7 @@ const label = { inputProps: { 'aria-label': 'Switch demo' } };
 function LeftBar(userInfo ) {
   
   const userIn = useSelector(state => state.auth.userdet); 
-  console.log({userIn});
+ // console.log({userIn});
   const [dropzoneOpen, setDropzoneOpen] = useState(false);
   const [files, setFiles] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -76,7 +76,7 @@ function LeftBar(userInfo ) {
         marginLeft:'10px',
         textShadow: '0.5px 0.5px 1px rgba(0, 0, 0, 0.1)',
                     
-                      }}>{userDetails.firstName+" "+userDetails.lastName}</Box>
+                      }}>{userDetails?.firstName+" "+userDetails?.lastName}</Box>
         </Box>
         <DropzoneDialog
             open={dropzoneOpen}

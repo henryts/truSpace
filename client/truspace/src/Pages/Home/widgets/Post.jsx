@@ -28,10 +28,10 @@ import { likeUnlikeApi } from '../../../api/postApi';
 export default function Post({ feed }) {
   const userInfo = localStorage.getItem('userdet');
   const parsedUserInfo = JSON.parse(userInfo);
-  //const 
- console.log(feed.likes?.parsedUserInfo?._id,"likeszzzzzzzzz");
- const isLiked = Boolean(likes[parsedUserInfo?._id]);
- console.log({isLiked});
+  console.log(feed,"feed like from local" );
+  const [isLiked, setIsLiked] = useState(feed?.likes[parsedUserInfo?._id]|| false);
+
+
 
   const formattedDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -50,7 +50,10 @@ export default function Post({ feed }) {
       console.log({isLiked});
      
       const response = await likeUnlikeApi(feed?._id,parsedUserInfo?._id,isLiked);
-      console.log(response); // Handle the response as needed
+     // console.log(response?.likes[parsedUserInfo?._id]);
+       setIsLiked(response?.likes[parsedUserInfo?._id]);
+
+    //  feed?.likes[parsedUserInfo?._id] // Handle the response as needed
     } catch (error) {
       console.error(error);
     }

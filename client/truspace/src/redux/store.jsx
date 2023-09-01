@@ -28,6 +28,7 @@ const store = configureStore({
   reducer: {
     auth: authStore,
     feed: feedReducer,
+    
   },
   preloadedState: persistedState,
 });

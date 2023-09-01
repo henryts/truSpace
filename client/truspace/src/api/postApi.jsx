@@ -31,3 +31,15 @@ export const likeUnlikeApi = async (postid,userId,isLiked) => {
     return err.message;
   }
 };
+export const addComment = async (postid,userId,comment) => {
+  try {
+   
+   console.log("in comment api ")
+    const response = await axiosUserInstance.patch(`/posts/${postid}/addComment`,{userId,comment});
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return err.message;
+  }
+};
+

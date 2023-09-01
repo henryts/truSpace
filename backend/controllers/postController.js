@@ -60,9 +60,7 @@ export const getUserPosts = async (req, res) => {
 export const likeUnlikePost = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log({id});
     const { userId } = req.body;
-    console.log({userId});
     const post = await Post.findById(id);
   
     const isLiked = post.likes.get(userId);
@@ -85,3 +83,13 @@ export const likeUnlikePost = async (req, res) => {
     res.status(404).json({ message: err.message });
   }
 };
+
+export const addComment = asyncErrorHandler(async (req, res) => {
+   
+  const { id } = req.params;
+  console.log({id});
+  const { userId ,comment} = req.body;
+  console.log({userId,comment});
+
+
+});

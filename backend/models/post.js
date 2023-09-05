@@ -17,15 +17,13 @@ const postSchema = mongoose.Schema(
     location: String,
     description: String,
     picturePath: String, 
-    userPicturePath: String, //remove
+    userProfilePhoto: String, 
+   
     likes: {
       type: Map,
       of: Boolean,
     },
-    comments: {
-      type: Array,
-      default: [],
-    },
+   
   },
   { timestamps: true }
 );

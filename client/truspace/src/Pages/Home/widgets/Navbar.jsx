@@ -12,10 +12,13 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Diversity3Icon from '@mui/icons-material/Diversity3';
 import MailIcon from '@mui/icons-material/Mail';
 import { useDispatch } from 'react-redux';
 import { setlogout } from '../../../redux/Features/authSlice';
 import { useNavigate } from 'react-router-dom';
+
+
 
 const StyledToolbar = styled(Toolbar)({
   display: 'flex',
@@ -61,7 +64,7 @@ function Navbar(userInfo) {
         <MenuIcon
           sx={{ display: { md: 'none', lg: 'none', xs: 'block', sm: 'block' } }}
         />
-        <Typography variant='h6' sx={{ display: { xs: 'none', sm: 'block' } }}>
+        <Typography variant='h6' sx={{ display: { xs: 'none', sm: 'block' } }} onClick={()=>{navigate('/')}} >
           truSpace
         </Typography>
 
@@ -69,6 +72,10 @@ function Navbar(userInfo) {
           <InputBase placeholder='search...' />
         </Search>
         <Icons>
+       
+        <Badge badgeContent={4} color='error'>
+        <Diversity3Icon onClick={()=>navigate('/network')}/>
+          </Badge>
           <Badge badgeContent={4} color='error'>
             <MailIcon color='white' />
           </Badge>
@@ -105,9 +112,11 @@ function Navbar(userInfo) {
           horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: 'top',
+          vertical: 'bottom',
           horizontal: 'right',
         }}
+        sx={{ marginTop: "40px" }}
+     
       >
         <MenuItem>Profile</MenuItem>
         <MenuItem>My account</MenuItem>

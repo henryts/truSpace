@@ -18,6 +18,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Switch from '@mui/material/Switch';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import {Avatar} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { DropzoneDialog } from "material-ui-dropzone";
 import { upDateProfilePhoto } from '../../../api/updateProfilePhoto';
 import { setCredential } from '../../../redux/Features/authSlice';
@@ -27,8 +28,9 @@ const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
 function LeftBar(userInfo ) {
   
-  const userIn = useSelector(state => state.auth.userdet); 
+ // const userIn = useSelector(state => state.auth.userdet); 
  // console.log({userIn});
+ const navigate = useNavigate();
   const [dropzoneOpen, setDropzoneOpen] = useState(false);
   const [files, setFiles] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -50,21 +52,20 @@ function LeftBar(userInfo ) {
       console.log(response.data,"response from server");
       setCurrentPic(response?.data?.profilePhoto);
       localStorage.setItem('userdet', JSON.stringify(response.data));
-      // dispatch(setCredential(response.data));
+       dispatch(updateProfilePhotoInState(response.data));
      }
     console.log({currentPic});
- 
+     
   }
 
  
   return (
     
-    <Box sx={{ width: '100%',
-     maxWidth: '250px', 
-     bgcolor: 'background.paper',display:{xs:"none", sm:"block"}  }}>
+    <Box sx={{ width: '100%', 
+     maxWidth: '250px',display:{xs:"none", sm:"block"},marginLeft:'1px',borderRadius:'20px'  }}>
         
-      <Box position="fixed" marginLeft={3} marginTop={4}>
-      <Box textAlign="center" marginBottom={3}>
+      <Box position="fixed" marginLeft={5} marginTop={4} >
+      <Box textAlign="center" marginBottom={3}  sx={{height:"100px"}}>
           <Avatar onClick={() => setDropzoneOpen(true)}  src={currentPic} sx={{ width: 84, height: 84, margin: '0 auto' }} />
           <Box sx={{  marginTop: '15px',
         fontSize: '1.25rem', // Adjust the font size
@@ -75,6 +76,7 @@ function LeftBar(userInfo ) {
         textAlign: 'center',
         marginLeft:'10px',
         textShadow: '0.5px 0.5px 1px rgba(0, 0, 0, 0.1)',
+      
                     
                       }}>{userDetails?.firstName+" "+userDetails?.lastName}</Box>
         </Box>
@@ -86,12 +88,12 @@ function LeftBar(userInfo ) {
             maxFileSize={5000000}
             onClose={() => setDropzoneOpen(false)}
           />
-    <nav aria-label="main mailbox folders">
+    <nav aria-label="main mailbox folders" >
       <List>
         <ListItem disablePadding>
-          <ListItemButton component="a" href="#home">
+          <ListItemButton component="a"  onClick={()=>{navigate('/')}}>
             <ListItemIcon>
-              <HomeIcon/>
+              <HomeIcon onClick={()=>{navigate('/')}}/>
             </ListItemIcon>
             <ListItemText primary="Home" />
           </ListItemButton>
@@ -105,7 +107,7 @@ function LeftBar(userInfo ) {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton component="a" href="#profile">
+          <ListItemButton component="a"onClick={()=>{navigate('/profile')}}>
             <ListItemIcon>
               <PersonIcon/>
             </ListItemIcon>
@@ -140,21 +142,7 @@ function LeftBar(userInfo ) {
       </List>
     </nav>
     <Divider />
-    <nav aria-label="secondary mailbox folders">
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemText primary="Trash" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton component="a" href="#simple-list">
-            <ListItemText primary="Spam" />
-          </ListItemButton>
-        </ListItem>
-      </List>
-      
-    </nav>
+    
     </Box>
 
   </Box>

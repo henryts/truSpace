@@ -1,10 +1,12 @@
 import Post from "../models/Post.js";
 import User from "../models/userModel.js";
+import SavePost from "../models/savePostModel.js";
+import Comment from "../models/commentModel.js";
 import asyncErrorHandler from "../errors/asyncErrorHandler.js";
 
 /* CREATE */
 export const createPost = asyncErrorHandler(async (req, res) => {
-  console.log("in new post");
+ // console.log("in new post");
   const { userId, description } = req.body;
   if (req.file) {
     // Check if req.file exists
@@ -87,9 +89,65 @@ export const likeUnlikePost = async (req, res) => {
 export const addComment = asyncErrorHandler(async (req, res) => {
    
   const { id } = req.params;
-  console.log({id});
   const { userId ,comment} = req.body;
-  console.log({userId,comment});
+  const user = await User.findById(userId);
+  try {
+    const newComment = new Comment({
+      commentedUserId: userId ,
+      commentedUserName: user?.firstName+" "+user?.lastName,
+      commentedUserPhoto: user?.profilePhoto,
+      postId:  id ,
+      comment:comment,
+      liked: [],
+      reply: [],
+    });
+
+    const savedComment = await newComment.save();
+
+    res.status(201).json(savedComment);
+  } catch (error) {
+    res.status(500).json({ error: 'Error inserting comment' });
+  }
+  
+});
+
+export const getComments = asyncErrorHandler(async (req, res) => {
+  const postId = req.params.id;
+ // console.log({ postId });
+  const comments = await Comment.find({ postId }).sort({ createdAt: -1 });
+  res.status(201).json(comments);
+  console.log(comments);
+});
+
+export const savePost = asyncErrorHandler(async (req, res) => {
+  try {
+    
+    const { userId, postId } = req.body;
+
+    
+ 
+
+   
+    const filter = { userId: userId, postId: postId };
+
+   
+    const update = {
+      userId: userId,
+      postId: postId,
+    };
+
+    
+    const options = { upsert: true };
+
+    
+    const savedSavePost = await SavePost.findOneAndUpdate(filter, update, options);
+
+    res.status(201).json(savedSavePost);
+  } catch (error) {
+    console.error(error);
+   
+    res.status(500).json({ error: 'Internal server error' });
+  }
 
 
 });

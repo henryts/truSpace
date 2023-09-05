@@ -26,8 +26,11 @@ const authSlice = createSlice({
     },
     updateProfilePhotoInState: (state, action) => {
       state.userdet.profilePhoto = action.payload;
-  }
+  },
+  updateCoverPhotoInState: (state, action) => {
+    state.userdet.coverPhoto = action.payload;
+}
 }});
 
-export const { setCredential, setlogout, updateProfilePhotoInState } = authSlice.actions;
+export const { setCredential, setlogout, updateProfilePhotoInState,updateCoverPhotoInState } = authSlice.actions;
 export default authSlice.reducer;

@@ -43,3 +43,31 @@ export const addComment = async (postid,userId,comment) => {
   }
 };
 
+export const getComments = async (postid) => {
+  try {
+   
+  
+    const response = await axiosUserInstance.get(`/posts/${postid}/getComments`);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return err.message;
+  }
+};
+
+export const savePost = async (userId,postId) => {
+  try {
+   console.log("in post save api ");
+   const requestBody = {
+    userId: userId,
+    postId: postId,
+  };
+    const response = await axiosUserInstance.post(`/posts/savePost`,requestBody);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return err.message;
+  }
+};
+
+

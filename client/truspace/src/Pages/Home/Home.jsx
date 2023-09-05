@@ -24,9 +24,9 @@ function App() {
    <>
     <Navbar userInfo={parsedUserInfo} />
     
-      <Stack direction={"row"} spacing={2}>
+      <Stack direction={"row"} spacing={-6}>
     <LeftBar userInfo={parsedUserInfo} />
-    <Feed userInfo={parsedUserInfo}/>
+    <Feed userInfo={parsedUserInfo} isOwnProfile={false}/>
     <Rightbar/>
     </Stack>
   

@@ -1,15 +1,24 @@
 import mongoose from "mongoose";
-import Post from './postModel'; 
 
-const commentSchema = new Schema(
+
+const commentSchema = new mongoose.Schema(
     {
         commentedUserId:{
-            type:String,
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"User",
             required:true
         },
+        commentedUserPhoto:{
+            type: String,
+            default: "../public/assets/default.png",
+        },
+        commentedUserName:{
+            type: String,
+            
+        },
         postId:{
-            type:Schema.Types.ObjectId,
-            ref:Post,
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Post",
             required:true
         },
         comment:{
@@ -21,5 +30,5 @@ const commentSchema = new Schema(
     },
     {timestamps:true}
 )
-const Comment = model("Comments",commentSchema)
+const Comment = mongoose.model("Comments",commentSchema)
 export default Comment

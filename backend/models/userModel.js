@@ -44,6 +44,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "../public/assets/default.png",
     },
+    coverPhoto: {
+      type: String,
+      default: "../public/assets/default-cover-image.jpg",
+    },
     friends: {
       type: Array,
       default: [],

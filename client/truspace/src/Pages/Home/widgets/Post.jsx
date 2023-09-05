@@ -10,6 +10,10 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+
+import Comment from './comment';
 import {
   ChatBubbleOutlineOutlined,
   FavoriteBorderOutlined,
@@ -29,8 +33,12 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import CommentIcon from '@mui/icons-material/Comment';
 import TextField from '@mui/material/TextField';
+import SaveSucess from './components/SaveSucess';
 import { likeUnlikeApi } from '../../../api/postApi';
 import { addComment } from '../../../api/postApi';
+import { getComments } from '../../../api/postApi';
+import { savePost } from '../../../api/postApi';
+import EditPost from './editPost';
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -43,9 +51,38 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function Post({ feed }) {
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null); // State for anchor element
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);//post edit modal state
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const handleEditClick = () => {
+   // handleClose();
+  };
+  const handleClose = () => {
+    
+  };
+
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget); // Set the anchor element to the MoreVertIcon
+    setOpen(true);
+    setTimeout(() => {
+      setOpen(false);
+    }, 1000);
+  };
+  const handleSavePost = async()=>{
+    const response = await savePost(parsedUserInfo?._id,feed?._id);
+    if (response?.userId !== undefined) {
+      setOpenSnackbar(true);  
+    }
+   // console.log(response?.userId);
+  // return response?.userId;
+  }
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
   const userInfo = localStorage.getItem('userdet');
   const parsedUserInfo = JSON.parse(userInfo);
-  console.log(feed,"feed like from local" );
+ // console.log(feed,"feed like from local" );
   const [isLiked, setIsLiked] = useState(feed?.likes[parsedUserInfo?._id]|| false);
   const [expanded, setExpanded] = React.useState(false);
   
@@ -86,38 +123,64 @@ export default function Post({ feed }) {
   
 
   //**comments operation**
-
-    const [comment, setComment] = useState('');
   
+    const [comment, setComment] = useState('');
+    const [showButton, setShowButton] = useState(false);
     const handleCommentChange = (e) => {
       setComment(e.target.value);
+      setShowButton(comment.length > 0);
     };
-    const handleSubmitComment = async () => {
+    const [visibleComments, setVisibleComments] = useState(2); 
+
+    const showMoreComments = () => {
+      setVisibleComments(visibleComments + 2); 
+    };
+    const [tempComment, settempComment] = useState([]);
+
+    const handleSubmitComment = async (e) => {
       try {
-       
+           settempComment(comment);
          const response = await addComment(feed?._id,parsedUserInfo?._id,comment);
-      console.log("commented!!!",comment);
+      console.log("commented!!!",response);
+      getCommentz();
         // Handle the API response, e.g., show a success message.
        // console.log('Comment posted:', response.data);
-  
-        // Optionally, clear the TextField after successful submission.
+       setComment(e.target.value);
+     
         setComment('');
       } catch (error) {
-        // Handle errors, e.g., show an error message.
+        
         console.error('Error posting comment:', error);
       }
     };
+
+    //fetch comment
+    useEffect(() => {
+      // Fetch comments when the component mounts
+      getCommentz();
+    }, []);
+    const [commentz, setCommentz] = useState([]);
+   
+    const getCommentz = async()=>{
+       
+      var responseC = await getComments(feed?._id,parsedUserInfo?._id);
+      setCommentz(responseC);
+      //  console.log(responseC[0]?.comment,"comentsssszz");
+
+
+    }
+   
   return (
     <Card sx={{ width: "100%", maxWidth: 750, margin: "0 auto", marginBottom: 5, marginLeft: 10 }}>
   <CardHeader
     avatar={
-      <Avatar sx={{ bgcolor: red[500],marginLeft:"50px" }} aria-label="recipe">
-        {feed?.userProfilePhoto}
-      </Avatar>
+      <Avatar sx={{ bgcolor: red[500],marginLeft:"50px" }} aria-label="recipe" src={feed?.userProfilePhoto}/>
+       
+    
     }
     action={
-      <IconButton aria-label="settings">
-        <MoreVertIcon />
+      <IconButton aria-label="settings" onClick={handleMenuClick}>
+        <MoreVertIcon  onClick={() => setOpen(true)}/>
       </IconButton>
     }
     title={feed?.firstName+" "+feed?.lastName}  // Replace with the actual user's name
@@ -162,14 +225,80 @@ export default function Post({ feed }) {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-         <Box>{comment}</Box> 
-        <TextField id="standard-basic" label="Add a comment" variant="standard"  sx={{width:"100%"}} value={comment}
-        onChange={handleCommentChange}/>
-        <Button variant="contained" sx={{marginTop:"10px"}} onClick={handleSubmitComment}>Comment</Button>
-
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+       
+        <Avatar sx={{ bgcolor: red[500],marginLeft:"10px" }} aria-label="recipe" src={feed?.userProfilePhoto}/>
+          <TextField
+        id="standard-basic"
+        label="Add a comment"
+        variant="outlined" // Use "outlined" variant for rounded edges
+        fullWidth
+        sx={{ borderRadius: 50,width:"80% ",marginLeft:"10px" }} // Adjust the border-radius as needed
+        value={comment}
+        onChange={handleCommentChange}
+        InputLabelProps={{ shrink: true }} // Ensure the label stays above the input
+      />
+          
+          </Box> 
+          
+       {showButton && (
+        <Button
+          variant="contained"
+          sx={{ marginTop: "10px",width:"10px" ,borderRadius:"20px",marginLeft:"60px"}}
+          onClick={handleSubmitComment}
+        >
+          Post  
+        </Button>
+      )}
+        
+         <Box>
+         {commentz.slice(0, visibleComments).map((comment) => (
+        <Comment key={comment._id} comment={comment} />
+      ))}
+      {commentz.length > visibleComments && (
+        <button onClick={showMoreComments}
+        style={{
+          background: 'none',
+          border: 'none',
+          padding: '0',
+          textDecoration: 'underline',
+          cursor: 'pointer',
+          color: 'blue', // You can change the color to match your design
+        }}>load More..</button>
+      )}
+          
+          </Box> 
+    
         </CardContent>
       </Collapse>
-  
+      {/* {openSnackbar?
+  <SaveSucess open={openSnackbar} onClose={handleCloseSnackbar} />:null
+} */}
+      <Menu
+          id='demo-positioned-menu'
+          aria-labelledby='demo-positioned-button'
+          open={open}
+          onClose={handleClose}
+          anchorEl={anchorEl} // Specify the anchor element
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          sx={{ marginTop: "40px" }}
+     
+      >
+        <MenuItem onClick={handleSavePost}>Save Post</MenuItem>
+        <MenuItem>Delete</MenuItem>
+      
+      </Menu> 
+     
+       <SaveSucess open={openSnackbar} onClose={handleCloseSnackbar} />
+      
 </Card>
+
   );
 }

@@ -23,7 +23,7 @@ import { DropzoneDialog } from "material-ui-dropzone";
 import { upDateProfilePhoto } from '../../../api/updateProfilePhoto';
 import { setCredential } from '../../../redux/Features/authSlice';
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
-
+import { updateProfilePhotoInState } from '../../../redux/Features/authSlice';
 
 
 function LeftBar(userInfo ) {
@@ -31,6 +31,7 @@ function LeftBar(userInfo ) {
  // const userIn = useSelector(state => state.auth.userdet); 
  // console.log({userIn});
  const navigate = useNavigate();
+ const userdet = useSelector((state) => state.auth.userdet);
   const [dropzoneOpen, setDropzoneOpen] = useState(false);
   const [files, setFiles] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -39,8 +40,10 @@ function LeftBar(userInfo ) {
   const [currentPic,setCurrentPic] = useState(userDetails?.profilePhoto);
   const dispatch = useDispatch();
   const handleSave =async (files) => {
-      setFiles(files);
+     setFiles(files);
      setSelectedImage(files[0]);
+     setCurrentPic(files[0]);
+     dispatch(updateProfilePhotoInState(files[0]));
      const formData = new FormData();
      formData.append("profilePhoto",selectedImage);
      formData.append("userId",userDetails?._id);
@@ -50,9 +53,9 @@ function LeftBar(userInfo ) {
      if(response.data)
      {
       console.log(response.data,"response from server");
-      setCurrentPic(response?.data?.profilePhoto);
-      localStorage.setItem('userdet', JSON.stringify(response.data));
-       dispatch(updateProfilePhotoInState(response.data));
+      
+    localStorage.setItem('userdet', JSON.stringify(response.data));
+       //dispatch(updateProfilePhotoInState(response.data));
      }
     console.log({currentPic});
      
@@ -66,7 +69,7 @@ function LeftBar(userInfo ) {
         
       <Box position="fixed" marginLeft={5} marginTop={4} >
       <Box textAlign="center" marginBottom={3}  sx={{height:"100px"}}>
-          <Avatar onClick={() => setDropzoneOpen(true)}  src={currentPic} sx={{ width: 84, height: 84, margin: '0 auto' }} />
+          <Avatar onClick={() => setDropzoneOpen(true)}  src={userdet?.profilePhoto} sx={{ width: 84, height: 84, margin: '0 auto' }} />
           <Box sx={{  marginTop: '15px',
         fontSize: '1.25rem', // Adjust the font size
         fontWeight: '',

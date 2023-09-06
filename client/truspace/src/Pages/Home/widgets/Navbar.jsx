@@ -14,7 +14,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import MailIcon from '@mui/icons-material/Mail';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { setlogout } from '../../../redux/Features/authSlice';
 import { useNavigate } from 'react-router-dom';
 
@@ -48,6 +48,7 @@ const UserImage = styled('div')(({ theme }) => ({
   },
 }));
 
+
 function Navbar(userInfo) {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
@@ -57,6 +58,7 @@ function Navbar(userInfo) {
     localStorage.removeItem('token');
     navigate('/');
   };
+  const userdet = useSelector((state) => state.auth.userdet);
 
   return (
     <AppBar position='sticky'>
@@ -87,7 +89,7 @@ function Navbar(userInfo) {
             alt='Remy Sharp'
             width='30px'
             height='30px'
-            src={userInfo?.userInfo?.profilePhoto}
+            src={userdet?.profilePhoto}
           />
         </Icons>
         <UserImage onClick={() => setOpen(true)}>
@@ -98,7 +100,7 @@ function Navbar(userInfo) {
             alt='Remy Sharp'
             width='25px'
             height='25px'
-            src={userInfo?.userInfo?.profilePhoto}
+            src={userdet.profilePhoto}
           />
         </UserImage>
       </StyledToolbar>
